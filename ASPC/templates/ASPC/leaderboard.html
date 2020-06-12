@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="section-image" id="top">
+    <div class="container">
+      <div class="row">
+      
+          <div class="col-9">
+             <div class="jumbotron-fluid">
+                <h3 class="display-4">The Deets</h3>
+             </div>
+          </div>
+
+          <div class="col-3">
+          </div>
+
+      </div>
+    </div>
+</section>
+
+<!-- Table/Profit -->
+{% if bets %}
+<div class="container">
+   <div class="row">
+    <div class="col-12">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Punter</th>
+                <th score="col" class="text-center">Spent ($)</th>
+                <th score="col" class="text-center">Return ($)</th>
+                <th scope="col" class="text-center">Profit ($)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for punter in profit_ladder %}
+                  <tr>
+                      {% for punter_name, values in punter.items %}
+                          {% if forloop.counter == 1 %}
+                              <td>{{ values }}</td>
+                          {% else %}
+                              <td class="text-center">{{ values|floatformat:2 }}</td>
+                          {% endif %}
+                      {% endfor %}
+                  </tr>  
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+   </div>
+</div>
+{% else %}
+    <p>No bets are available.</p>
+{% endif %}
+
+<!-- Table/Odds -->
+{% if bets %}
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Biggest Cowards</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Punter</th>
+                <th score="col" class="text-center">Weighted Ave. Odds</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in odds_ladder %}
+                <tr>
+                <td>{{ x }}</td>
+                <td class="text-center">{{ y|floatformat:2 }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!--Table/Cash-out-->
+
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Cash Out Kings</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Punter</th>
+                <th score="col" class="text-center">Cash-Out Kings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in cashed_data %}
+                <tr>
+                  <td>{{ x }}</td>
+                  <td class="text-center">{{ y|floatformat:2 }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<p>No bets are available.</p>
+{% endif %}
+
+<!-- Table/Money Lost -->
+
+{% if bets %}
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Biggest Widowmakers</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Team</th>
+                <th score="col" class="text-center">Lost Betting For</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in team_cost_data.items %}
+                <tr>
+                <td>{{ x }}</td>
+                <td class="text-center">-${{ y|floatformat:2 }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Costly Underdogs</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Team</th>
+                <th score="col" class="text-center">Lost Betting Against</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in opposition_cost_data.items %}
+                <tr>
+                  <td>{{ x }}</td>
+                  <td class="text-center">-${{ y|floatformat:2 }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<p>No bets are available.</p>
+{% endif %}
+
+
+
+<!-- Table/Bet Counts -->
+{% if bets %}
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Bets Per Sport</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Sport</th>
+                <th score="col" class="text-center">Number of Bets</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in event_data.items %}
+                <tr>
+                <td>{{ x }}</td>
+                <td class="text-center">{{ y }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="pt-3 pb-3" style="color:white; font-size:0.6rem;">Bets Per Team</div>
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Team</th>
+                <th score="col" class="text-center">Number of Bets For</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x, y in team_data.items %}
+                <tr>
+                  <td>{{ x }}</td>
+                  <td class="text-center">{{ y }}</td>
+                </tr>   
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<p>No bets are available.</p>
+{% endif %}
+
+{% endblock %}
