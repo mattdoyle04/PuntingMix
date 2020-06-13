@@ -12,7 +12,11 @@ class ParentListView(ListView):
 
         num_punters = Punter.objects.count()
         week_num = datetime.today().isocalendar()[1]
-        punter_num = week_num % num_punters
+        try:
+            punter_num = week_num % num_punters
+        except:
+            new_punter = Punter('Richard', 0)
+            new_punter.save()
 
         hits = Hit.objects.first()
         hits.visits = hits.visits + 1
