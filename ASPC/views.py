@@ -12,15 +12,21 @@ class ParentListView(ListView):
 
         num_punters = Punter.objects.count()
         week_num = datetime.today().isocalendar()[1]
+
         try:
             punter_num = week_num % num_punters
         except:
-            new_punter = Punter('Richard', 0)
+            punter_num = 0
+            new_punter = Punter(name='Richard', week=0)
             new_punter.save()
 
-        hits = Hit.objects.first()
-        hits.visits = hits.visits + 1
-        hits.save()
+        try:
+            hits = Hit.objects.first()
+            hits.visits = hits.visits + 1
+            hits.save()
+        except:
+            hits = Hit(visits=1)
+            hits.save()
 
         whos_turn = Punter.objects.filter(week__exact=punter_num)[0].name
 
@@ -29,14 +35,23 @@ class ParentListView(ListView):
         context['bet_count'] = Parent.objects.count()
         context['bet_count_wins'] = Parent.objects.filter(bet_win__exact=True).count()
         context['bet_count_losses'] = context['bet_count'] - context['bet_count_wins']
-        context['bet_win_ratio'] = round((context['bet_count_wins'] / context['bet_count'])*100,2)
+        try:
+            context['bet_win_ratio'] = round((context['bet_count_wins'] / context['bet_count'])*100,2)
+        except:
+            context['bet_win_ratio'] = 0.00
         context['bet_count_multi'] =  Multi.objects.count()
         context['bet_count_multi_wins'] = Multi.objects.filter(bet_win__exact=True).count()
         context['bet_count_multi_losses'] = context['bet_count_multi'] - context['bet_count_multi_wins']
-        context['bet_win_ratio_multi'] = round((context['bet_count_multi_wins'] / context['bet_count_multi'])*100,2)
+        try:
+            context['bet_win_ratio_multi'] = round((context['bet_count_multi_wins'] / context['bet_count_multi'])*100,2)
+        except:
+            context['bet_win_ratio_multi'] = 0.00
         context['bet_return_total'] = Parent.objects.aggregate(bet_return_sum=Sum('bet_return'))['bet_return_sum']
         context['bet_amount_total'] = Parent.objects.aggregate(bet_amount_sum=Sum('bet_amount'))['bet_amount_sum']
-        context['bet_cum_pnl'] = context['bet_return_total'] - context['bet_amount_total']
+        try:
+            context['bet_cum_pnl'] = context['bet_return_total'] - context['bet_amount_total']
+        except:
+            context['bet_cum_pnl'] = 0.00
         context['bet_return_average'] = Parent.objects.aggregate(bet_return_average=Avg('bet_return'))['bet_return_average']
 
         punts = Parent.objects.all()
@@ -52,13 +67,17 @@ class ParentListView(ListView):
             profit = round(returned - spent,2)
             punting_data.append({'name':punter,'spent':spent,'returned':returned,'profit':profit})
         
-        sorted_punting_data = sorted(punting_data, key=lambda k: k['profit'], reverse=True) 
-        context['profit_ladder'] = sorted_punting_data[0]
-
-        if sorted_punting_data[-1]['name'] == "Unsanctioned":
-            context['loss_ladder'] = sorted_punting_data[-2]
-        else:
-            context['loss_ladder'] = sorted_punting_data[-1]
+        try:
+            sorted_punting_data = sorted(punting_data, key=lambda k: k['profit'], reverse=True) 
+            context['profit_ladder'] = sorted_punting_data[0]
+            if sorted_punting_data[-1]['name'] == "Unsanctioned":
+                context['loss_ladder'] = sorted_punting_data[-2]
+            else:
+                context['loss_ladder'] = sorted_punting_data[-1]
+        except:
+            context['profit_ladder'] = ""
+            context['loss_ladder'] = ""
+            context['loss_ladder'] = ""
 
         odds_data = {}
         for punter in punters:
@@ -70,11 +89,14 @@ class ParentListView(ListView):
         
         sorted_odds = sorted(odds_data.items(), key=lambda x: x[1])
         
-        x,y = sorted_odds[0] 
-        if x == "Unsanctioned":
-            context['odds_ladder'] = sorted_odds[1]
-        else:
-            context['odds_ladder'] = sorted_odds[0]
+        try:
+            x,y = sorted_odds[0] 
+            if x == "Unsanctioned":
+                context['odds_ladder'] = sorted_odds[1]
+            else:
+                context['odds_ladder'] = sorted_odds[0]
+        except:
+            context['odds_ladder'] = ""
 
         return context 
 
