@@ -45,7 +45,7 @@
 
 <div class="container-fluid" id="floating-cards">
     <div class="row d-flex">
-        <div class="col-4">
+        <div class="col-6">
             <div class="card" id="pie-Card">
               <h3 class="card-title text-center pt-2" style="color: rgba(255,255,255,1)">{{ bet_win_ratio|floatformat:0 }}%</h3>
               <small class="card-subtitle text-center" style="color: rgba(255,255,255,1)">Bet Win Ratio</small>
@@ -95,7 +95,7 @@
               </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <div class="card" id="pie-Card2">
               <h3 class="card-title text-center pt-2" style="color: rgba(255,255,255,1)">{{ bet_win_ratio_multi|floatformat:0 }}%</h3>
               <small class="card-subtitle text-center" style="color: rgba(255,255,255,1)">Leg Win Ratio</small>
@@ -145,68 +145,30 @@
               </div>
             </div>
         </div>
-        <div class="col-4">
+    </div>
+</div>
+
+<div class="container-fluid" id="return-cards">
+    <div class="d-flex justify-content-center"><h2 style="color:white">Returns</h2></div>
+    <div class="row d-flex">
+        <div class="col-6">
             <div class="card" id="line-Card">
-              <h3 class="card-title text-center pt-2" style="color: rgba(255,255,255,1)">${{ bet_return_average|floatformat:0 }}</h3>
-              <small class="card-subtitle text-center" style="color: rgba(255,255,255,1)">Average Return</small>
-              <div class="card-body">
-                <canvas id="lineChart" style="background-color: rgba(0,0,0,0)"></canvas>
-                <script>
-                var ctxLine = document.getElementById('lineChart').getContext('2d');
-                var lineChart = new Chart(ctxLine, {
-                    type: 'line',
-                    data: {
-                        labels: [{% for bet in object_list %}'{{ bet.bet_date|date:'d M' }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
-                        datasets: [{
-                            data: [{% for bet in object_list %}'{{ bet.cum_average }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
-                            backgroundColor: [
-                                'rgba(11, 232, 129, 0.8)',
-                                'rgba(255, 99, 132, 0.8)',
-                            ],
-                            borderColor: [
-                                'rgba(11, 232, 129, 1)',
-                                'rgba(255, 99, 132, 1)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        legend: {
-                          display: false,
-                          labels: {
-                            fontColor: 'rgb(255, 255, 255)'
-                          }
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    display: false
-                                },
-                                gridLines: {
-                                    drawTicks: false,
-                                    display: false
-                                }
-                            }],
-                            xAxes: [{
-                                ticks: {
-                                    display: false
-                                },
-                                gridLines: {
-                                    drawTicks: false,
-                                    display: false
-                                }
-                            }]
-                        }
-                    }
-                  });
-                  </script>
-              </div>
+                <div class="card-body text-center">
+                    <h3 class="card-title text-center pt-2" style="color: rgba(255,255,255,1)">{{ percent_return|floatformat:2 }}%</h3>
+                    <small class="card-subtitle text-center" style="color: rgba(255,255,255,1)">Return since {{inception.date}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card" id="line-Card">
+                <div class="card-body text-center">
+                    <h3 class="card-title text-center pt-2" style="color: rgba(255,255,255,1)">{{ annualised_return|floatformat:2 }}%</h3>
+                    <small class="card-subtitle text-center" style="color: rgba(255,255,255,1)">Annualised Return</small> 
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-
 
 
 <div class="container">

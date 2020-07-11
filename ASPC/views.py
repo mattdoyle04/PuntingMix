@@ -31,6 +31,9 @@ class ParentListView(ListView):
         whos_turn = Punter.objects.filter(week__exact=punter_num)[0].name
 
         context['whos_turn'] = whos_turn
+        context['today'] = datetime.today()
+        context['inception'] = datetime(2020,6,11)
+        context['days'] = (context['today'] - context['inception']).days
         context['hits'] = Hit.objects.first().visits
         context['bet_count'] = Parent.objects.count()
         context['bet_count_wins'] = Parent.objects.filter(bet_win__exact=True).count()
@@ -53,6 +56,8 @@ class ParentListView(ListView):
         except:
             context['bet_cum_pnl'] = 0.00
         context['bet_return_average'] = Parent.objects.aggregate(bet_return_average=Avg('bet_return'))['bet_return_average']
+        context['percent_return'] = (context['bet_return_total'] / context['bet_amount_total'] - 1) * 100
+        context['annualised_return'] = (context['bet_return_total'] / context['bet_amount_total']) ** (365 / context['days'])
 
         punts = Parent.objects.all()
         punters = []

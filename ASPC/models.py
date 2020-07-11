@@ -4,7 +4,7 @@ from django.utils import timezone
 class Parent(models.Model):
     punter = models.CharField(max_length=200)
     bet_date = models.DateField(default=timezone.now)
-    bet_year = models.PositiveIntegerField(default=2019)
+    bet_year = models.PositiveIntegerField(default=2020)
     bet_week = models.PositiveIntegerField()
     bet_number = models.PositiveIntegerField()
     bet_legs = models.PositiveIntegerField()

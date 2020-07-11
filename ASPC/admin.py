@@ -7,7 +7,7 @@ class ParentAdmin(admin.ModelAdmin):
     list_disply_links = ('punter',)
     list_editable = ('bet_date','bet_week','bet_number','bet_legs','bet_event','bet_amount','bet_odds','bet_return','bet_win','bet_cashed')
     list_filter = ('punter','bet_date','bet_week','bet_number','bet_legs','bet_event','bet_amount','bet_odds','bet_return','bet_win','bet_cashed')
-    ordering = ['-bet_date','punter','bet_number']
+    ordering = ['-bet_date','bet_number','punter']
     
 @admin.register(Multi)
 class MultiAdmin(admin.ModelAdmin):
