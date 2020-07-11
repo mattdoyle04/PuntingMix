@@ -57,7 +57,7 @@ class ParentListView(ListView):
             context['bet_cum_pnl'] = 0.00
         context['bet_return_average'] = Parent.objects.aggregate(bet_return_average=Avg('bet_return'))['bet_return_average']
         context['percent_return'] = (context['bet_return_total'] / context['bet_amount_total'] - 1) * 100
-        context['annualised_return'] = (context['bet_return_total'] / context['bet_amount_total']) ** (365 / context['days'])
+        context['annualised_return'] = ((context['bet_return_total'] / context['bet_amount_total']) ** (365 / context['days']) - 1) * 100
 
         punts = Parent.objects.all()
         punters = []
